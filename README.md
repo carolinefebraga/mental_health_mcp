@@ -109,7 +109,7 @@ node server.js
 
 ---
 
-### ⚠️ Aviso importante
+###  Aviso importante
 
 Este sistema foi projetado com limitações intencionais para evitar riscos éticos,
 não realizando diagnósticos ou recomendações clínicas.
@@ -129,3 +129,129 @@ Ele atua apenas como um assistente de apoio emocional e não substitui acompanha
 ###  Pronto!
 
 Após esses passos, o Claude estará integrado ao seu servidor MCP e poderá utilizar sua API de apoio emocional.
+
+
+Arquitetura desenvolvida:
+## Arquitetura do Sistema
+
+O projeto é composto por três camadas principais:
+
+### 1. API em Python (FastAPI)
+
+A API foi desenvolvida utilizando o framework FastAPI e é responsável por:
+
+* Receber a mensagem do usuário
+* Processar o texto (normalização e análise)
+* Consultar a base de conhecimento (`knowledge_base.py`)
+* Identificar possíveis padrões emocionais
+* Retornar uma resposta estruturada com:
+
+  * mensagem de apoio
+  * sugestões de autocuidado
+  * nível de risco
+  * aviso ético
+
+#### 📍 Endpoint principal:
+
+```http
+POST /chat
+```
+
+####  Exemplo de requisição:
+
+```json
+{
+  "message": "Não me sinto bem hoje"
+}
+```
+
+#### Exemplo de resposta:
+
+```json
+{
+  "response": "Entendo. Você pode me contar um pouco mais sobre o que vem sentindo?\n\n[...]",
+  "risk_level": "low"
+}
+```
+
+A lógica da API é baseada em regras e palavras-chave, garantindo previsibilidade e controle das respostas.
+
+---
+
+### 2. Base de Conhecimento (knowledge_base.py)
+
+A base de conhecimento contém:
+
+* Categorias emocionais (ex: ansiedade, tristeza, estresse)
+* Palavras-chave associadas
+* Respostas pré-definidas
+* Sugestões de autocuidado
+* Palavras críticas (para detecção de risco elevado)
+
+Essa estrutura permite que o sistema funcione sem depender de modelos externos, utilizando lógica determinística.
+
+---
+
+### 3. Servidor MCP (Node.js)
+
+O servidor MCP funciona como um intermediário entre o Claude e a API em Python.
+
+####  Responsabilidades:
+
+* Receber chamadas do Claude (via MCP)
+* Encaminhar requisições para a API FastAPI
+* Retornar a resposta da API para o Claude
+
+####  Fluxo:
+
+1. Usuário envia mensagem no Claude
+2. Claude aciona a tool via MCP
+3. MCP (Node.js) envia requisição HTTP para a API Python
+4. API processa e retorna resposta
+5. MCP devolve o resultado ao Claude
+6. Claude exibe a resposta ao usuário
+
+---
+
+### 4. Exposição da API (ngrok)
+
+Como o Claude não acessa `localhost`, foi utilizado o ngrok para expor a API:
+
+```bash
+ngrok http 8000
+```
+
+Isso gera uma URL pública que é utilizada pelo servidor MCP.
+
+---
+
+### Fluxo Completo do Sistema
+
+```text
+Usuário → Claude → MCP (Node.js) → API (FastAPI) → Base de Conhecimento
+                                             ↓
+                                      Resposta estruturada
+                                             ↓
+Usuário recebe resposta no Claude
+```
+
+---
+
+###  Considerações Técnicas
+
+* O sistema não utiliza inteligência artificial generativa para decisões clínicas
+* Toda a lógica é baseada em regras controladas
+* O Claude atua apenas como interface conversacional
+* O MCP permite integração segura entre o modelo e sistemas externos
+
+---
+
+### Objetivo da Arquitetura
+
+Garantir:
+
+* controle das respostas
+* segurança ética
+* facilidade de manutenção
+* integração com ferramentas modernas (MCP + LLMs)
+
