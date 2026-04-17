@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "Mental Health MCP": {
+      "command": "node",
+      "args": ["/home/cbraga/mental_health_mcp/server.js"]
+    }
+  }
+}
