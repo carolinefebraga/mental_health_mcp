@@ -1,0 +1,20 @@
+Python
+Linguagem de programação utilizada para desenvolver a lógica principal da aplicação, incluindo processamento das mensagens e regras de resposta.
+
+FastAPI
+Framework web em Python usado para criar a API REST que recebe as mensagens do usuário e retorna respostas estruturadas.
+
+ngrok
+Ferramenta que expõe o servidor local na internet, permitindo que o Claude acesse a API mesmo estando rodando localmente.
+
+Middleware MCP
+Camada intermediária que conecta o Claude à sua API, traduzindo chamadas do modelo em requisições HTTP.
+
+Node.js
+Ambiente de execução JavaScript utilizado para rodar o servidor MCP responsável pela integração com o Claude.
+
+SDK MCP (@modelcontextprotocol/sdk)
+Biblioteca usada para implementar o protocolo MCP, permitindo registrar ferramentas (tools) que o Claude pode chamar.
+
+Swagger (OpenAPI)
+Interface automática gerada pelo FastAPI (/docs) para testar e visualizar os endpoints da API.
